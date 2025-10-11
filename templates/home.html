@@ -1,0 +1,42 @@
+{% extends "base (1).html" %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Welcome to SkyLink Institute of ACS</h1>
+            <p class="hero-subtitle">Your Stop College Companion</p>
+            <p class="hero-year">For A.Y. 2025-2026</p>
+            
+            <div class="courses-grid">
+                <div class="course-card">BBA</div>
+                <div class="course-card">B.Com</div>
+                <div class="course-card">B.Sc</div>
+                <div class="course-card">MBA</div>
+                <div class="course-card">M.Com</div>
+                <div class="course-card">M.Sc</div>
+                <div class="course-card featured">Data Science</div>
+            </div>
+            
+            <div class="contact-info">
+                <p><strong>Address:</strong> SkyLink Institute Campus</p>
+                <p><strong>Email ID:</strong> info@skylink.edu</p>
+                <p><strong>Contact No:</strong> +91-7385326615</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="info-section">
+    <div class="container">
+        <div class="info-content">
+            <h2>Get Started Today!</h2>
+            <p>Join thousands of students who have already started their journey with SkyLink Institute.</p>
+            <div class="cta-buttons">
+                <a href="{{ url_for('login') }}" class="btn btn-primary">Login to Dashboard</a>
+                <a href="{{ url_for('register') }}" class="btn btn-secondary">Create Account</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

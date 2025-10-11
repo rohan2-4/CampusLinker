@@ -1,0 +1,73 @@
+{% extends "base (1).html" %}
+
+{% block title %}Exam Management - Campus Linker{% endblock %}
+
+{% block content %}
+<div class="exam-section">
+    <div class="container">
+        <div class="page-header">
+            <h1>Exam Management</h1>
+            <p>Manage student examinations and schedules</p>
+        </div>
+        
+        <div class="exam-form">
+            <form method="POST" action="{{ url_for('exam') }}">
+                <div class="form-section">
+                    <h2>Exam Information</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="exam_name">Exam Name <span class="required">*</span></label>
+                            <input type="text" id="exam_name" name="exam_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="course_name">Course Name <span class="required">*</span></label>
+                            <select id="course_name" name="course_name" required>
+                                <option value="">Select Course</option>
+                                <option value="BBA">BBA</option>
+                                <option value="B.Com">B.Com</option>
+                                <option value="B.Sc">B.Sc</option>
+                                <option value="MBA">MBA</option>
+                                <option value="M.Com">M.Com</option>
+                                <option value="M.Sc">M.Sc</option>
+                                <option value="Data Science">Data Science</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="exam_date">Exam Date <span class="required">*</span></label>
+                            <input type="date" id="exam_date" name="exam_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exam_time">Exam Time <span class="required">*</span></label>
+                            <input type="time" id="exam_time" name="exam_time" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="duration">Duration (minutes) <span class="required">*</span></label>
+                            <input type="number" id="duration" name="duration" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="max_marks">Maximum Marks <span class="required">*</span></label>
+                            <input type="number" id="max_marks" name="max_marks" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="instructions">Instructions</label>
+                        <textarea id="instructions" name="instructions" rows="4" placeholder="Enter exam instructions..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Create Exam</button>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

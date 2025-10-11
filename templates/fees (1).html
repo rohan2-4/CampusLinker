@@ -1,0 +1,77 @@
+{% extends "base (1).html" %}
+
+{% block title %}Fee Management - Campus Linker{% endblock %}
+
+{% block content %}
+<div class="fees-section">
+    <div class="container">
+        <div class="page-header">
+            <h1>Fee Management</h1>
+            <p>Manage student fee payments</p>
+        </div>
+        
+        <form method="POST" class="fees-form">
+            <div class="form-section">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="admission_id">Admission ID <span class="required">*</span></label>
+                        <input type="number" id="admission_id" name="admission_id" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="student_name">Student Name <span class="required">*</span></label>
+                        <input type="text" id="student_name" name="student_name" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="course_name">Course Name <span class="required">*</span></label>
+                        <input type="text" id="course_name" name="course_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Amount <span class="required">*</span></label>
+                        <input type="number" id="amount" name="amount" step="0.01" min="0" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="exam_category">Exam Category</label>
+                        <select id="exam_category" name="exam_category">
+                            <option value="">Select Category</option>
+                            <option value="Semester 1">Semester 1</option>
+                            <option value="Semester 2">Semester 2</option>
+                            <option value="Semester 3">Semester 3</option>
+                            <option value="Semester 4">Semester 4</option>
+                            <option value="Final Exam">Final Exam</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment_method">Payment Method <span class="required">*</span></label>
+                        <select id="payment_method" name="payment_method" required>
+                            <option value="">Select Method</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Online">Online</option>
+                            <option value="Card">Card</option>
+                            <option value="Cheque">Cheque</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-secondary" onclick="printReceipt()">Print Receipt</button>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Dashboard</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function printReceipt() {
+    // Generate and print receipt
+    window.print();
+}
+</script>
+{% endblock %}
