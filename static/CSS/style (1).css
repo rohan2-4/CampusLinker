@@ -85,6 +85,12 @@ body {
   font-size: 0.875rem;
 }
 
+/* Required field asterisk */
+.required {
+  color: #dc3545;
+  font-weight: bold;
+}
+
 /* Hero Section */
 .hero-section {
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
@@ -216,6 +222,66 @@ body {
 }
 
 /* Form Styles */
+.auth-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.auth-form .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.auth-form .form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e9ecef;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.auth-form .form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 1.5rem;
+}
+
+.forgot-password a {
+  color: #6c757d;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.forgot-password a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.auth-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.auth-link a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-link a:hover {
+  text-decoration: underline;
+}
+
 .admission-section,
 .fees-section,
 .result-section,
@@ -285,10 +351,6 @@ body {
   margin-bottom: 0.5rem;
   font-weight: 600;
   color: #333;
-}
-
-.required {
-  color: #dc3545;
 }
 
 .form-group input,
@@ -475,6 +537,36 @@ body {
 }
 
 /* Responsive Design */
+/* Analysis Page */
+.analysis-section {
+  padding: 2rem 0;
+}
+
+.analysis-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem; /* spacing between charts */
+  margin-top: 1.5rem;
+}
+
+.chart-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+}
+
+.chart-card h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.chart-card canvas {
+  width: 100% !important;
+  max-height: 360px;
+}
+
 @media (max-width: 768px) {
   .hero-content h1 {
     font-size: 2rem;
@@ -536,4 +628,90 @@ body {
   .page-header h1 {
     font-size: 2rem;
   }
+}
+/* Admin Section Styles */
+.admin-section {
+    padding: 2rem 0;
+}
+
+.table-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.no-data {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 2rem;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 50%;
+    max-width: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.close {
+    float: right;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+}
+
+.close:hover {
+    color: #333;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.status-badge.pass {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.fail {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Responsive Design for Admin Pages */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%;
+        margin: 10% auto;
+    }
+    
+    .table-section {
+        padding: 1rem;
+    }
 }

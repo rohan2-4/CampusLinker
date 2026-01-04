@@ -1,0 +1,98 @@
+{% extends "base (1).html" %}
+
+{% block title %}Analysis - Campus Linker{% endblock %}
+
+{% block content %}
+<div class="analysis-section">
+    <div class="container">
+        <div class="page-header">
+            <h1>Analysis</h1>
+            <p>Overview of results and performance</p>
+        </div>
+
+        <div class="analysis-grid">
+            <div class="chart-card">
+                <h3>Entries per Day (Last 14 days)</h3>
+                <canvas id="lineChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Score Distribution</h3>
+                <canvas id="histChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Pass vs Fail</h3>
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+
+        <div class="page-actions">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const lineLabels = {{ line_labels | tojson }};
+const lineValues = {{ line_values | tojson }};
+const histLabels = {{ hist_labels | tojson }};
+const histValues = {{ hist_values | tojson }};
+const pieLabels = {{ pie_labels | tojson }};
+const pieValues = {{ pie_values | tojson }};
+
+function makeChart(ctx, type, data, options) {
+    return new Chart(ctx, { type, data, options });
+}
+
+// Line chart
+makeChart(document.getElementById('lineChart').getContext('2d'), 'line', {
+    labels: lineLabels,
+    datasets: [{
+        label: 'Entries',
+        data: lineValues,
+        borderColor: '#4e79a7',
+        backgroundColor: 'rgba(78, 121, 167, 0.2)',
+        tension: 0.25,
+        fill: true,
+        pointRadius: 3
+    }]
+}, {
+    responsive: true,
+    plugins: {
+        title: { display: true, text: 'Entries per Day (Last 14 days)' }
+    },
+    scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 } }
+    }
+});
+
+// Histogram (bar) chart
+makeChart(document.getElementById('histChart').getContext('2d'), 'bar', {
+    labels: histLabels,
+    datasets: [{
+        label: 'Students',
+        data: histValues,
+        backgroundColor: '#59a14f'
+    }]
+}, {
+    responsive: true,
+    plugins: {
+        title: { display: true, text: 'Score Distribution (%)' }
+    },
+    scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 } }
+    }
+});
+
+// Pie chart
+makeChart(document.getElementById('pieChart').getContext('2d'), 'pie', {
+    labels: pieLabels,
+    datasets: [{
+        data: pieValues,
+        backgroundColor: ['#f28e2b', '#e15759']
+    }]
+}, { responsive: true, plugins: { title: { display: true, text: 'Pass vs Fail' } } });
+</script>
+{% endblock %}
+
+

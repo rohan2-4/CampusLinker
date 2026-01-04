@@ -7,34 +7,59 @@
     <div class="container">
         <div class="dashboard-header">
             <h1>Welcome, {{ username }}</h1>
-            <h2>Your Dashboard</h2>
+            <h2>Your Dashboard • Role: {{ session.role | title }}</h2>
         </div>
         
         <div class="dashboard-grid">
-            <a href="{{ url_for('admission') }}" class="dashboard-card">
-                <div class="card-icon">📝</div>
-                <h3>Admission</h3>
-                <p>Manage student admissions</p>
-            </a>
+            {% if session.role == 'student' %}
+                <!-- Student Links -->
+                <a href="{{ url_for('admission') }}" class="dashboard-card">
+                    <div class="card-icon">📝</div>
+                    <h3>Admission</h3>
+                    <p>Manage student admissions</p>
+                </a>
+                
+                <a href="{{ url_for('fees') }}" class="dashboard-card">
+                    <div class="card-icon">💰</div>
+                    <h3>Fees</h3>
+                    <p>Fee management system</p>
+                </a>
+                
+                <a href="{{ url_for('exam') }}" class="dashboard-card">
+                    <div class="card-icon">📋</div>
+                    <h3>Exam</h3>
+                    <p>Take exams</p>
+                </a>
+                
+                <a href="{{ url_for('result') }}" class="dashboard-card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Result</h3>
+                    <p>View your results</p>
+                </a>
+                
+            {% elif session.role == 'admin' %}
+                <!-- Admin Links -->
+                <a href="{{ url_for('admin_exams') }}" class="dashboard-card">
+                    <div class="card-icon">📋</div>
+                    <h3>Manage Exams</h3>
+                    <p>Create and manage exams</p>
+                </a>
+                
+                <a href="{{ url_for('admin_results') }}" class="dashboard-card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Manage Results</h3>
+                    <p>View and update all results</p>
+                </a>
+                
+                <a href="{{ url_for('analysis') }}" class="dashboard-card">
+                    <div class="card-icon">📊</div>
+                    <h3>Analysis</h3>
+                    <p>System analytics</p>
+                </a>
+                
+            {% endif %}
             
-            <a href="{{ url_for('fees') }}" class="dashboard-card">
-                <div class="card-icon">💰</div>
-                <h3>Fees</h3>
-                <p>Fee management system</p>
-            </a>
-            
-            <a href="{{ url_for('exam') }}" class="dashboard-card">
-                <div class="card-icon">📋</div>
-                <h3>Exam</h3>
-                <p>Exam management</p>
-            </a>
-            
-            <a href="{{ url_for('result') }}" class="dashboard-card">
-                <div class="card-icon">🎯</div>
-                <h3>Result</h3>
-                <p>View and manage results</p>
-            </a>
-            
+            <!-- Common Links -->
             <a href="{{ url_for('social_activity') }}" class="dashboard-card">
                 <div class="card-icon">🎭</div>
                 <h3>Social Activity</h3>

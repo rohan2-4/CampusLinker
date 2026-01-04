@@ -6,93 +6,59 @@
 <div class="result-section">
     <div class="container">
         <div class="page-header">
-            <h1>Result Management</h1>
-            <p>View and manage student results</p>
-        </div>
-        
-        <!-- Result Search Form -->
-        <div class="search-form">
-            <form method="GET" class="result-search">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="student_id">Student ID</label>
-                        <input type="number" id="student_id" name="student_id">
-                    </div>
-                    <div class="form-group">
-                        <label for="exam_id">Exam ID</label>
-                        <input type="number" id="exam_id" name="exam_id">
-                    </div>
-                    <div class="form-group">
-                        <label for="course">Course</label>
-                        <select id="course" name="course">
-                            <option value="">Select Course</option>
-                            <option value="BBA">BBA</option>
-                            <option value="B.Com">B.Com</option>
-                            <option value="B.Sc">B.Sc</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Display Result</button>
-                    <button type="button" class="btn btn-secondary">Cancel</button>
-                    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Dashboard</a>
-                </div>
-            </form>
+            <h1>Your Results</h1>
+            <p>View your exam results</p>
         </div>
         
         <!-- Results Table -->
         {% if results %}
         <div class="results-table">
-            <h2>Student Results</h2>
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>Student ID</th>
                         <th>Student Name</th>
-                        <th>Course</th>
+                        <th>Exam</th>
                         <th>Subject</th>
                         <th>Obtain Marks</th>
                         <th>Total Marks</th>
                         <th>Grade</th>
                         <th>CGPA</th>
                         <th>Result</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for result in results %}
                     <tr>
-                        <td>{{ result.student_id }}</td>
                         <td>{{ result.student_name }}</td>
-                        <td>{{ result.course_name }}</td>
+                        <td>{{ result.exam_name or 'N/A' }}</td>
                         <td>{{ result.subject }}</td>
                         <td>{{ result.obtain_marks }}</td>
                         <td>{{ result.total_marks }}</td>
-                        <td>{{ result.grade }}</td>
-                        <td>{{ result.cgpa }}</td>
-                        <td>{{ result.result_status }}</td>
+                        <td>{{ result.grade or '-' }}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary" onclick="downloadResult({{ result.result_id }})">Download</button>
-                            <button class="btn btn-sm btn-secondary" onclick="printResult({{ result.result_id }})">Print</button>
+                            {% if result.cgpa is not none %}
+                                {{ "%.2f"|format(result.cgpa) }}
+                            {% else %}-{% endif %}
+                        </td>
+                        <td>
+                            <span class="status-badge {% if result.result_status == 'Pass' %}pass{% else %}fail{% endif %}">
+                                {{ result.result_status }}
+                            </span>
                         </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+        {% else %}
+        <div class="alert alert-info">
+            No results found. <a href="{{ url_for('exam') }}">Take an exam first</a>
+        </div>
         {% endif %}
+
+        <div class="page-actions">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
     </div>
 </div>
-
-<script>
-function downloadResult(resultId) {
-    // Implement download functionality
-    alert('Download functionality will be implemented');
-}
-
-function printResult(resultId) {
-    // Implement print functionality
-    window.print();
-}
-</script>
 {% endblock %}

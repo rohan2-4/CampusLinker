@@ -1,0 +1,62 @@
+================================================================================
+                        CAMPUS LINKER - FEE RECEIPT
+================================================================================
+
+Receipt No: 1
+Admission ID: 1
+Date: 2025-11-25 12:56:15
+
+================================================================================
+                            STUDENT DETAILS
+================================================================================
+
+Student Name: KRUSHNA DNYANESHWAR KHARADE
+Course Name: M.Sc
+
+================================================================================
+                            PAYMENT DETAILS
+================================================================================
+
+Total Fee Amount: Rs. 99200.00
+Amount Paid: Rs. 99200.00
+Payment Method: Cash
+Payment Status: Completed
+
+================================================================================
+                         FEES BREAKDOWN
+================================================================================
+
+The total fee includes:
+- Admission Fee: Rs. 5,000.00
+- Tuition Fee: Rs. 20,000.00
+- Exam Fee: Rs. 1,500.00
+- Library Fee: Rs. 500.00
+- Hostel Fee: Rs. 15,000.00
+- Other Fee: Rs. 0.00
+
+================================================================================
+                         TERMS & CONDITIONS
+================================================================================
+
+1. This receipt is valid only with the official seal of the institute.
+2. Please keep this receipt for future reference.
+3. In case of any discrepancy, please contact the finance office immediately.
+4. The fee is non-refundable once paid.
+
+================================================================================
+                         CONTACT INFORMATION
+================================================================================
+
+Institution: Skylink Institute of ACS
+Phone: +91-7385326615
+Email: info@skylink.edu
+Address: Skylink Institute, College Campus
+
+================================================================================
+                    Thank you for your payment!
+================================================================================
+
+This is an auto-generated receipt. No signature required.
+Generated on: 2025-11-25 18:28:16
+
+================================================================================

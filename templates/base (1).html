@@ -16,7 +16,7 @@
                 </div>
                 {% if session.username %}
                 <div class="user-info">
-                    <span>Welcome, {{ session.username }}</span>
+                    <span>Welcome, {{ session.username }} ({{ session.role | title }})</span>
                     <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
                 </div>
                 {% else %}

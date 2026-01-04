@@ -1,0 +1,408 @@
+{% extends "base (1).html" %}
+
+{% block title %}Manage Exams - Campus Linker{% endblock %}
+
+{% block content %}
+<div class="admin-section">
+    <div class="container">
+        <div class="page-header">
+            <h1>Exam Management</h1>
+            <p>Create and manage exams</p>
+        </div>
+
+        <!-- Create Exam Form -->
+        <div class="form-section">
+            <h2>Create New Exam (Multiple Subjects)</h2>
+            <p style="color: #666; margin-bottom: 20px;">Create one exam with multiple subjects, each having its own date and time</p>
+            <form method="POST" class="exam-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="exam_name">Exam Name *</label>
+                        <input type="text" id="exam_name" name="exam_name" placeholder="e.g., Final Exam 2025" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exam_type">Exam Type *</label>
+                        <select id="exam_type" name="exam_type" required>
+                            <option value="">Select Type</option>
+                            <option value="Midterm">Midterm</option>
+                            <option value="Final">Final</option>
+                            <option value="Quiz">Quiz</option>
+                            <option value="Assignment">Assignment</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="course_name">Course *</label>
+                        <select id="course_name" name="course_name" required>
+                            <option value="">Select Course</option>
+                            {% for course in courses %}
+                            <option value="{{ course }}">{{ course }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="instructions">Instructions</label>
+                    <textarea id="instructions" name="instructions" rows="2" placeholder="General instructions for all subjects"></textarea>
+                </div>
+
+                <hr style="margin: 30px 0; border: none; border-top: 2px solid #ddd;">
+                
+                <h3>Add Subjects</h3>
+                <p style="color: #666; margin-bottom: 15px;">Add one or more subjects with their respective dates, times, and marks</p>
+                
+                <div id="subjects-container">
+                    <div class="subject-row" style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="subject_0">Subject *</label>
+                                <select name="subject[]" class="subject-select" required>
+                                    <option value="">Select Subject</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                    <option value="Physics">Physics</option>
+                                    <option value="Chemistry">Chemistry</option>
+                                    <option value="Biology">Biology</option>
+                                    <option value="Computer Science">Computer Science</option>
+                                    <option value="English">English</option>
+                                    <option value="History">History</option>
+                                    <option value="Economics">Economics</option>
+                                    <option value="Business Studies">Business Studies</option>
+                                    <option value="Accounting">Accounting</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="exam_date_0">Date *</label>
+                                <input type="date" name="exam_date[]" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="exam_time_0">Time *</label>
+                                <input type="time" name="exam_time[]" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="duration_0">Duration (minutes) *</label>
+                                <input type="number" name="duration[]" min="1" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="max_marks_0">Max Marks *</label>
+                                <input type="number" name="max_marks[]" min="1" required>
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: flex-end;">
+                                <button type="button" class="btn btn-danger btn-sm remove-subject" style="width: 100%;">Remove Subject</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions" style="margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" id="add-subject-btn">+ Add Another Subject</button>
+                    <button type="submit" class="btn btn-primary">Create Exam</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Exams List -->
+        <div class="table-section">
+            <h2>Existing Exams</h2>
+            {% if exams %}
+                {% for exam_group in exams %}
+                <div class="exam-group" style="margin-bottom: 25px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+                    <div class="exam-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; cursor: pointer;">
+                        <h3 style="margin: 0; display: inline-block;">{{ exam_group.exam_name }}</h3>
+                        <span style="background: rgba(255,255,255,0.3); padding: 5px 12px; border-radius: 20px; font-size: 0.9em; margin-left: 10px;">
+                            {{ exam_group.exam_type }} | {{ exam_group.course_name }}
+                        </span>
+                        <span style="float: right; font-size: 0.9em;">
+                            {{ exam_group.subjects|length }} Subject(s)
+                        </span>
+                    </div>
+                    
+                    <div class="subjects-table" style="padding: 15px;">
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #f5f5f5; border-bottom: 2px solid #ddd;">
+                                    <th style="padding: 10px; text-align: left; font-weight: 600;">Subject</th>
+                                    <th style="padding: 10px; text-align: left; font-weight: 600;">Date</th>
+                                    <th style="padding: 10px; text-align: left; font-weight: 600;">Time</th>
+                                    <th style="padding: 10px; text-align: center; font-weight: 600;">Duration (min)</th>
+                                    <th style="padding: 10px; text-align: center; font-weight: 600;">Max Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for subject in exam_group.subjects %}
+                                <tr style="border-bottom: 1px solid #eee; {% if loop.index % 2 == 0 %}background: #f9f9f9;{% endif %}">
+                                    <td style="padding: 12px; font-weight: 500;">{{ subject.subject }}</td>
+                                    <td style="padding: 12px;">{{ subject.exam_date }}</td>
+                                    <td style="padding: 12px;">{{ subject.exam_time }}</td>
+                                    <td style="padding: 12px; text-align: center;">{{ subject.duration }}</td>
+                                    <td style="padding: 12px; text-align: center;">{{ subject.max_marks }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <p class="no-data">No exams found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.admin-section {
+    padding: 20px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 15px;
+}
+
+.page-header h1 {
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.page-header p {
+    color: #7f8c8d;
+    margin: 0;
+}
+
+.form-section, .table-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.form-section h2, .table-section h2 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+}
+
+.form-group {
+    flex: 1 0 300px;
+    margin: 0 10px 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #34495e;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.form-actions {
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th, .data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.data-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.data-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.no-data {
+    text-align: center;
+    color: #7f8c8d;
+    font-style: italic;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+    }
+    
+    .form-group {
+        flex: 1 0 100%;
+    }
+    
+    .data-table {
+        font-size: 14px;
+    }
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.btn-sm {
+    padding: 8px 12px;
+    font-size: 12px;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addSubjectBtn = document.getElementById('add-subject-btn');
+    const subjectsContainer = document.getElementById('subjects-container');
+    let subjectCount = 1;
+    
+    // Add subject button click handler
+    addSubjectBtn.addEventListener('click', function() {
+        const subjectRow = document.createElement('div');
+        subjectRow.className = 'subject-row';
+        subjectRow.style.cssText = 'background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ddd;';
+        
+        subjectRow.innerHTML = `
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="subject_${subjectCount}">Subject *</label>
+                    <select name="subject[]" class="subject-select" required>
+                        <option value="">Select Subject</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="English">English</option>
+                        <option value="History">History</option>
+                        <option value="Economics">Economics</option>
+                        <option value="Business Studies">Business Studies</option>
+                        <option value="Accounting">Accounting</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exam_date_${subjectCount}">Date *</label>
+                    <input type="date" name="exam_date[]" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="exam_time_${subjectCount}">Time *</label>
+                    <input type="time" name="exam_time[]" required>
+                </div>
+                <div class="form-group">
+                    <label for="duration_${subjectCount}">Duration (minutes) *</label>
+                    <input type="number" name="duration[]" min="1" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="max_marks_${subjectCount}">Max Marks *</label>
+                    <input type="number" name="max_marks[]" min="1" required>
+                </div>
+                <div class="form-group" style="display: flex; align-items: flex-end;">
+                    <button type="button" class="btn btn-danger btn-sm remove-subject" style="width: 100%;">Remove Subject</button>
+                </div>
+            </div>
+        `;
+        
+        subjectsContainer.appendChild(subjectRow);
+        subjectCount++;
+        
+        // Add remove event listener to new button
+        subjectRow.querySelector('.remove-subject').addEventListener('click', function(e) {
+            e.preventDefault();
+            subjectRow.remove();
+        });
+    });
+    
+    // Remove subject button handler for initial row
+    const removeButtons = document.querySelectorAll('.remove-subject');
+    removeButtons.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            // Don't allow removing if only one subject
+            if (subjectsContainer.querySelectorAll('.subject-row').length > 1) {
+                this.closest('.subject-row').remove();
+            } else {
+                alert('You must have at least one subject!');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

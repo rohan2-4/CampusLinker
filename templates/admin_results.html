@@ -1,0 +1,160 @@
+{% extends "base (1).html" %}
+
+{% block title %}Manage Results - Campus Linker{% endblock %}
+
+{% block content %}
+<div class="admin-section">
+    <div class="container">
+        <div class="page-header">
+            <h1>Result Management</h1>
+            <p>View and manage all student results</p>
+        </div>
+
+        <!-- Results Table -->
+        <div class="table-section">
+            {% if results %}
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Course</th>
+                            <th>Exam</th>
+                            <th>Subject</th>
+                            <th>Obtained Marks</th>
+                            <th>Total Marks</th>
+                            <th>Status</th>
+                            <th>Grade</th>
+                            <th>CGPA</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                        <tr>
+                            <td>{{ result.student_name }}</td>
+                            <td>{{ result.course_name }}</td>
+                            <td>{{ result.exam_name or 'N/A' }}</td>
+                            <td>{{ result.subject }}</td>
+                            <td>{{ result.obtain_marks }}</td>
+                            <td>{{ result.total_marks }}</td>
+                            <td>
+                                <span class="status-badge {% if result.result_status == 'Pass' %}pass{% else %}fail{% endif %}">
+                                    {{ result.result_status }}
+                                </span>
+                            </td>
+                            <td>{{ result.grade or '-' }}</td>
+                            <td>{{ result.cgpa or '-' }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" 
+                                        onclick="editResult({{ result.result_id }})">Edit</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="no-data">No results found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Edit Result Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Result</h2>
+        <form id="editResultForm" method="POST">
+            <input type="hidden" id="edit_result_id" name="result_id">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit_obtain_marks">Obtained Marks</label>
+                    <input type="number" id="edit_obtain_marks" name="obtain_marks" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit_result_status">Status</label>
+                    <select id="edit_result_status" name="result_status" required>
+                        <option value="Pending">Pending</option>
+                        <option value="Pass">Pass</option>
+                        <option value="Fail">Fail</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="edit_grade">Grade</label>
+                    <input type="text" id="edit_grade" name="grade">
+                </div>
+                <div class="form-group">
+                    <label for="edit_cgpa">CGPA</label>
+                    <input type="number" id="edit_cgpa" name="cgpa" step="0.01" min="0" max="10">
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Update Result</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function editResult(resultId) {
+    // Fetch result data and populate form
+    fetch(`/api/result/${resultId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('edit_result_id').value = data.result_id;
+            document.getElementById('edit_obtain_marks').value = data.obtain_marks;
+            document.getElementById('edit_result_status').value = data.result_status;
+            document.getElementById('edit_grade').value = data.grade || '';
+            document.getElementById('edit_cgpa').value = data.cgpa || '';
+            
+            // Show modal
+            document.getElementById('editModal').style.display = 'block';
+        });
+}
+
+// Close modal
+document.querySelector('.close').onclick = function() {
+    document.getElementById('editModal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('editModal');
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+}
+</script>
+
+<style>
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 50%;
+    max-width: 600px;
+}
+
+.close {
+    float: right;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+</style>
+{% endblock %}
